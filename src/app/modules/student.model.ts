@@ -92,4 +92,4 @@ const studentSchema = new Schema<Student>({
 
 // crete model
 
-const Student = model<Student>('Student',studentSchema)
+export const StudentModel = model<Student>('Student',studentSchema)
