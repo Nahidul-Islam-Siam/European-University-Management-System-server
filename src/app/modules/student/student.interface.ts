@@ -1,7 +1,5 @@
 import { Schema, model, connect } from 'mongoose';
 
-
-
 // 1. Create an interface representing a document in MongoDB.
 export type Gurdian = {
   fatherName: string;
@@ -12,14 +10,12 @@ export type Gurdian = {
   motherContactNo: string;
 };
 
-
-export type localGuardian = {                                                       
-    name: string;
-    occupation: string;
-    contactNo: string;
-    address: string;
-  };
-
+export type localGuardian = {
+  name: string;
+  occupation: string;
+  contactNo: string;
+  address: string;
+};
 
 export type userName = {
   firstName: string;
@@ -41,6 +37,6 @@ export type Student = {
   permanentAddress: string;
   gurdian: Gurdian;
   localGuardian: localGuardian;
-  profileImg?:string;
+  profileImg?: string;
   isActive: 'active' | 'inactive';
 };
