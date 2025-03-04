@@ -78,10 +78,7 @@ const localGuardianSchema = new Schema<LocalGuardian>({
     type: String,
     required: [true, 'Local Guardian Contact No is required'],
     trim: true,
-    match: [
-      /^\d{10,15}$/,
-      'Local Guardian Contact No must be between 10-15 digits',
-    ],
+    match:[/^\d{10,15}$/, 'Local Guardian Contact No must be between 10-15 digits'],
   },
   address: {
     type: String,
@@ -124,13 +121,13 @@ const studentSchema = new Schema<Student>({
     type: String,
     required: [true, 'Contact Number is required'],
     trim: true,
-    match: [/^\d{10,15}$/, 'Contact Number must be between 10-15 digits'],
-  },
-  emergencyContactNo: {
-    type: String,
-    required: [true, 'Emergency Contact No is required'],
+    match: [/^\d{10,15}$/, 'Contact Number must be between 10-15 digits'
+},
+  emergencyContactNo: { 
+    type: String, 
+    required: [true, 'Emergency Contact No is required'], 
     trim: true,
-    match: [/^\d{10,15}$/, 'Emergency Contact No must be between 10-15 digits'],
+    match: [/^\d{10,15}$/, 'Emergency Contact No must be between 10-15 digits']
   },
   bloodGroup: {
     type: String,
@@ -139,15 +136,15 @@ const studentSchema = new Schema<Student>({
       message: 'Invalid blood group',
     },
   },
-  presentAddress: {
-    type: String,
-    required: [true, 'Present Address is required'],
-    trim: true,
+  presentAddress: { 
+    type: String, 
+    required: [true, 'Present Address is required'], 
+    trim: true 
   },
-  permanentAddress: {
-    type: String,
-    required: [true, 'Permanent Address is required'],
-    trim: true,
+  permanentAddress: { 
+    type: String, 
+    required: [true, 'Permanent Address is required'], 
+    trim: true 
   },
   gurdian: {
     type: gurdianSchema,
@@ -157,9 +154,9 @@ const studentSchema = new Schema<Student>({
     type: localGuardianSchema,
     required: true,
   },
-  profileImg: {
-    type: String,
-    trim: true,
+  profileImg: { 
+    type: String, 
+    trim: true 
   },
   isActive: {
     type: String,
