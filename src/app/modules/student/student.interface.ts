@@ -38,5 +38,5 @@ export type Student = {
   gurdian: Gurdian;
   localGuardian: localGuardian;
   profileImg?: string;
-  isActive: 'active' | 'inactive';
+  isActive: 'active' | 'blocked';
 };
