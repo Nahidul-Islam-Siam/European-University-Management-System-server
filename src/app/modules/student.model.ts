@@ -66,7 +66,6 @@ const localGuardianSchema = new Schema<LocalGuardian>({
   },
 });
 
-
 const studentSchema = new Schema<Student>({
   id: { type: String },
   name: userNameSchema,
@@ -87,9 +86,6 @@ const studentSchema = new Schema<Student>({
   isActive: ['active', 'blocked'],
 });
 
-
-
-
 // crete model
 
-export const StudentModel = model<Student>('Student',studentSchema)
+export const StudentModel = model<Student>('Student', studentSchema);
