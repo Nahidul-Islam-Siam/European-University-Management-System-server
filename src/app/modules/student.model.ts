@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import validator from 'validator';
 import {
   Gurdian,
   LocalGuardian,
@@ -25,6 +26,10 @@ const userNameSchema = new Schema<UserName>({
     trim: true,
     maxlength: [20, 'Last Name should not be more than 20 characters'],
     message: 'Last Name is required',
+    validate: {
+      validator: (value: string) => validator.isAlpha(value),
+      message: '{VALUE} is not a valid name',
+    },
   },
 });
 
@@ -48,10 +53,6 @@ const guardianSchema = new Schema<Gurdian>({
     required: true,
     trim: true,
     maxlength: [15, 'Father Contact Number should not be more than 15 digits'],
-    validate: {
-      validator: (v: string) => /^[0-9]{10,15}$/.test(v),
-      message: 'Invalid phone number format',
-    },
   },
   motherName: {
     type: String,
@@ -72,10 +73,6 @@ const guardianSchema = new Schema<Gurdian>({
     required: true,
     trim: true,
     maxlength: [15, 'Mother Contact Number should not be more than 15 digits'],
-    validate: {
-      validator: (v: string) => /^[0-9]{10,15}$/.test(v),
-      message: 'Invalid phone number format',
-    },
   },
 });
 
@@ -108,10 +105,6 @@ const localGuardianSchema = new Schema<LocalGuardian>({
       15,
       'Local Guardian Contact Number should not be more than 15 digits',
     ],
-    validate: {
-      validator: (v: string) => /^[0-9]{10,15}$/.test(v),
-      message: 'Invalid phone number format',
-    },
   },
   address: {
     type: String,
@@ -157,7 +150,10 @@ const studentSchema = new Schema<Student>({
     unique: true,
     trim: true,
     lowercase: true,
-    match: [/^\S+@\S+\.\S+$/, 'Invalid email format'],
+    validate: {
+      validator: (value: string) => validator.isEmail(value),
+      message: '{VALUE} is not a valid email',
+    },
     message: 'Email cannot be empty',
   },
   contactNumber: {
@@ -165,10 +161,6 @@ const studentSchema = new Schema<Student>({
     required: true,
     trim: true,
     maxlength: [15, 'Contact Number should not be more than 15 digits'],
-    validate: {
-      validator: (v: string) => /^[0-9]{10,15}$/.test(v),
-      message: 'Invalid phone number format',
-    },
   },
   emergencyContactNo: {
     type: String,
@@ -178,10 +170,6 @@ const studentSchema = new Schema<Student>({
       15,
       'Emergency Contact Number should not be more than 15 digits',
     ],
-    validate: {
-      validator: (v: string) => /^[0-9]{10,15}$/.test(v),
-      message: 'Invalid phone number format',
-    },
   },
   bloodGroup: {
     type: String,
