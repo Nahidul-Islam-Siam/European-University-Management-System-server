@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { StudentServices } from './student.service';
 import { z } from 'zod';
+import StudentValidationSchema from './student.zod.validation';
 // import studentValidationSchema from './student.validation';
 
 const createStudent = async (req: Request, res: Response) => {
@@ -13,19 +14,10 @@ const createStudent = async (req: Request, res: Response) => {
     // const { error, value } = studentValidationSchema.validate(studentData);
 
     // creating validation using ZOD
-    const studentValidationSchema = z.object({
-      id: z.string(),
-      name: z.object({
-        firstName: z.string().max(20, {
-          message: 'First Name can not be more than 20 characters',
-        }),
-        middleName: z.string(),
-        lastName: z.string(),
-      }),
-    });
 
-    studentValidationSchema.parse(studentData);
-    const result = await StudentServices.createStudentIntoDB(studentData);
+    const zodparseData = StudentValidationSchema.parse(studentData);
+
+    const result = await StudentServices.createStudentIntoDB(zodparseData);
     if (error) {
       res.status(500).json({
         success: false,
