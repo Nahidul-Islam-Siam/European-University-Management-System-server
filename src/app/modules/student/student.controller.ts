@@ -18,13 +18,13 @@ const createStudent = async (req: Request, res: Response) => {
     const zodparseData = StudentValidationSchema.parse(studentData);
 
     const result = await StudentServices.createStudentIntoDB(zodparseData);
-    if (error) {
-      res.status(500).json({
-        success: false,
-        message: 'Internal server error',
-        error: error.details,
-      });
-    }
+    // if (error) {
+    //   res.status(500).json({
+    //     success: false,
+    //     message: 'Internal server error',
+    //     error: error.details,
+    //   });
+    // }
 
     res.status(200).json({
       success: true,
