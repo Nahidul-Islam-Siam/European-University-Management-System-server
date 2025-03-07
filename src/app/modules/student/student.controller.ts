@@ -1,13 +1,30 @@
 import { Request, Response } from 'express';
 import { StudentServices } from './student.service';
-import studentValidationSchema from './student.validation';
+import { z } from 'zod';
+// import studentValidationSchema from './student.validation';
 
 const createStudent = async (req: Request, res: Response) => {
   try {
     // creating a schema validation for the request body
 
     const { student: studentData } = req.body;
-    const { error } = studentValidationSchema.validate(studentData);
+
+    // data validation using joi
+    // const { error, value } = studentValidationSchema.validate(studentData);
+
+    // creating validation using ZOD
+    const studentValidationSchema = z.object({
+      id: z.string(),
+      name: z.object({
+        firstName: z.string().max(20, {
+          message: 'First Name can not be more than 20 characters',
+        }),
+        middleName: z.string(),
+        lastName: z.string(),
+      }),
+    });
+
+    studentValidationSchema.parse(studentData);
     const result = await StudentServices.createStudentIntoDB(studentData);
     if (error) {
       res.status(500).json({
