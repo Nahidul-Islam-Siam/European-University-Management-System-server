@@ -134,10 +134,11 @@ const studentSchema = new Schema<Student>({
   },
   gender: {
     type: String,
-    enum: ['male', 'female', 'other'],
+    enum: {
+      values: ['male', 'female', 'other'],
+      message: '{VALUE} is not a valid gender',
+    },
     required: true,
-    trim: true,
-    message: 'Gender cannot be empty',
   },
   dateOfBirth: {
     type: Date,
