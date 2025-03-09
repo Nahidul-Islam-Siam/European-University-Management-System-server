@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { StudentServices } from './student.service';
+import { deleteStudentsFromDB, StudentServices } from './student.service';
 import { z } from 'zod';
 import StudentValidationSchema from './student.zod.validation';
 // import studentValidationSchema from './student.validation';
@@ -40,7 +40,7 @@ const createStudent = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllStudents = async (req: Request, res: Response) => {
+const getAllStudents = async (req: Request, res: Response) => {
   try {
     const result = await StudentServices.getAllStudentsFromDB();
 
@@ -58,7 +58,7 @@ export const getAllStudents = async (req: Request, res: Response) => {
   }
 };
 
-export const getSingleStudents = async (req: Request, res: Response) => {
+const getSingleStudents = async (req: Request, res: Response) => {
   try {
     const { studentId } = req.params;
     const result = await StudentServices.getSingleStudentsFromDB(studentId);
@@ -77,8 +77,28 @@ export const getSingleStudents = async (req: Request, res: Response) => {
   }
 };
 
+const deleteStudent = async (req: Request, res: Response) => {
+  try {
+    const { studentId } = req.params;
+    const result = await deleteStudentsFromDB(studentId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Student is deleted successfully',
+      data: result,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error,
+    });
+  }
+};
+
 export const StudentControllers = {
   createStudent,
   getAllStudents,
   getSingleStudents,
+  deleteStudent,
 };

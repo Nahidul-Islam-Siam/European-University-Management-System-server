@@ -223,6 +223,10 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     trim: true,
     message: 'Account status cannot be empty',
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 studentSchema.statics.isUserExists = async function (id: string) {
@@ -252,7 +256,15 @@ studentSchema.post('save', function (doc, next) {
 
 // Query Middleware
 studentSchema.pre('find', function (next) {
-  console.log(this);
+  this.find({ isDeleted: { $ne: true } });
+  // console.log(this);
+  next();
+});
+
+studentSchema.pre('find', function (next) {
+  this.findOne({ isDeleted: { $ne: true } });
+  // console.log(this);
+  next();
 });
 // // creating a custom insrance method
 // studentSchema.methods.isUserExits = async function (id: string) {
