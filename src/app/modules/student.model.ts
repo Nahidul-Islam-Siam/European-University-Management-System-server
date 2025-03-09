@@ -250,6 +250,10 @@ studentSchema.post('save', function (doc, next) {
   next();
 });
 
+// Query Middleware
+studentSchema.pre('find', function (next) {
+  console.log(this);
+});
 // // creating a custom insrance method
 // studentSchema.methods.isUserExits = async function (id: string) {
 //   const existingUser = await Student.findOne({ id });
