@@ -8,6 +8,7 @@ import {
   TUserName,
 } from './student/student.interface';
 import bcrypt from 'bcrypt';
+import config from '../config';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -132,7 +133,6 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   password: {
     type: String,
     required: [true, 'Password is required'],
-    unique: true,
     maxlength: [20, 'Password should not be more than 20 characters'],
   },
   name: {
@@ -232,17 +232,22 @@ studentSchema.statics.isUserExists = async function (id: string) {
 
 // pre save middleware
 
-studentSchema.pre('save', function () {
+studentSchema.pre('save', async function (next) {
   // console.log(this, 'pre hook : we will save to data');
   // hashing password and save into db
-  bcrypt.hash(this, saltRounds, function (err, hash) {
-    // Store hash in your password DB.
-  });
+  const user = this; // doc
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  // Store hash in your password DB.
+  next();
 });
 
 // post save middleware / hook
-studentSchema.post('save', function () {
-  console.log(this, 'post hook : we saved our data');
+studentSchema.post('save', function (doc, next) {
+  doc.password = '';
+  next();
 });
 
 // // creating a custom insrance method
