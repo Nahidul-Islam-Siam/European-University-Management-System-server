@@ -21,12 +21,18 @@ const getAllStudentsFromDB = async () => {
   return result;
 };
 
-export const getSingleStudentsFromDB = async (id: string) => {
-  const result = await Student.findOne({ id });
+// export const getSingleStudentsFromDB = async (id: string) => {
+//   const result = await Student.findOne({ id });
+//   return result;
+// };
+
+const getSingleStudentsFromDB = async (id: string) => {
+  // const result = await Student.findOne({ id });
+  const result = await Student.aggregate([{ $match: { id: id } }]);
   return result;
 };
 
-export const deleteStudentsFromDB = async (id: string) => {
+const deleteStudentsFromDB = async (id: string) => {
   const result = await Student.updateOne({ id }, { isDeleted: true });
   return result;
 };
