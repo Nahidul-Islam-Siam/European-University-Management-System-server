@@ -1,13 +1,13 @@
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
 import {
+  StudentModel,
   TGurdian,
   TLocalGuardian,
   TStudent,
-  StudentMethod,
-  StudentModel,
   TUserName,
 } from './student/student.interface';
+import bcrypt from 'bcrypt';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -120,7 +120,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   },
 });
 
-const studentSchema = new Schema<TStudent, StudentModel, StudentMethod>({
+const studentSchema = new Schema<TStudent, StudentModel>({
   id: {
     type: String,
     required: true,
@@ -128,6 +128,12 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethod>({
     trim: true,
     maxlength: [20, 'Student ID should not be more than 20 characters'],
     message: 'Student ID cannot be empty',
+  },
+  password: {
+    type: String,
+    required: [true, 'Password is required'],
+    unique: true,
+    maxlength: [20, 'Password should not be more than 20 characters'],
   },
   name: {
     type: userNameSchema,
@@ -219,10 +225,31 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethod>({
   },
 });
 
-studentSchema.methods.isUserExits = async function (id: string) {
+studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id });
   return existingUser;
 };
+
+// pre save middleware
+
+studentSchema.pre('save', function () {
+  // console.log(this, 'pre hook : we will save to data');
+  // hashing password and save into db
+  bcrypt.hash(this, saltRounds, function (err, hash) {
+    // Store hash in your password DB.
+  });
+});
+
+// post save middleware / hook
+studentSchema.post('save', function () {
+  console.log(this, 'post hook : we saved our data');
+});
+
+// // creating a custom insrance method
+// studentSchema.methods.isUserExits = async function (id: string) {
+//   const existingUser = await Student.findOne({ id });
+//   return existingUser;
+// };
 
 // Create model
 export const Student = model<TStudent, StudentModel>('Student', studentSchema);

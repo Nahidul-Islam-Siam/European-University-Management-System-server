@@ -31,11 +31,11 @@ const createStudent = async (req: Request, res: Response) => {
       message: 'Student is created successfully',
       data: result,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
       message: 'Internal server error',
-      error: error,
+      error: error.message || 'something went wrong',
     });
   }
 };
@@ -49,10 +49,10 @@ export const getAllStudents = async (req: Request, res: Response) => {
       message: 'Student is retrieved successfully',
       data: result,
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'Internal server error',
+      message: error.message || 'Internal server error',
       error: error,
     });
   }
