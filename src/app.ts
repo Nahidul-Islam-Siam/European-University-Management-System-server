@@ -14,5 +14,5 @@ const getAController = (req: Request, res: Response) => {
 };
 app.get('/', getAController);
 
-console.log(process.cwd());
+// console.log(process.cwd());
 export default app;

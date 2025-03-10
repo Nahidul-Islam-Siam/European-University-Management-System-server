@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { deleteStudentsFromDB, StudentServices } from './student.service';
-import { z } from 'zod';
+
 import StudentValidationSchema from './student.zod.validation';
 // import studentValidationSchema from './student.validation';
 

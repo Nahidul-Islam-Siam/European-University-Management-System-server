@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
 import {
@@ -121,116 +122,132 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   },
 });
 
-const studentSchema = new Schema<TStudent, StudentModel>({
-  id: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    maxlength: [20, 'Student ID should not be more than 20 characters'],
-    message: 'Student ID cannot be empty',
-  },
-  password: {
-    type: String,
-    required: [true, 'Password is required'],
-    maxlength: [20, 'Password should not be more than 20 characters'],
-  },
-  name: {
-    type: userNameSchema,
-    required: true,
-    message: 'Student name cannot be empty',
-  },
-  gender: {
-    type: String,
-    enum: {
-      values: ['male', 'female', 'other'],
-      message: '{VALUE} is not a valid gender',
+const studentSchema = new Schema<TStudent, StudentModel>(
+  {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      maxlength: [20, 'Student ID should not be more than 20 characters'],
+      message: 'Student ID cannot be empty',
     },
-    required: true,
-  },
-  dateOfBirth: {
-    type: Date,
-    required: true,
-    message: 'Date of birth cannot be empty',
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    lowercase: true,
-    validate: {
-      validator: (value: string) => validator.isEmail(value),
-      message: '{VALUE} is not a valid email',
+    password: {
+      type: String,
+      required: [true, 'Password is required'],
+      maxlength: [20, 'Password should not be more than 20 characters'],
     },
-    message: 'Email cannot be empty',
+    name: {
+      type: userNameSchema,
+      required: true,
+      message: 'Student name cannot be empty',
+    },
+    gender: {
+      type: String,
+      enum: {
+        values: ['male', 'female', 'other'],
+        message: '{VALUE} is not a valid gender',
+      },
+      required: true,
+    },
+    dateOfBirth: {
+      type: Date,
+      required: true,
+      message: 'Date of birth cannot be empty',
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      validate: {
+        validator: (value: string) => validator.isEmail(value),
+        message: '{VALUE} is not a valid email',
+      },
+      message: 'Email cannot be empty',
+    },
+    contactNumber: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: [15, 'Contact Number should not be more than 15 digits'],
+    },
+    emergencyContactNo: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: [
+        15,
+        'Emergency Contact Number should not be more than 15 digits',
+      ],
+    },
+    bloodGroup: {
+      type: String,
+      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+      trim: true,
+      message: 'Invalid blood group',
+    },
+    presentAddress: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: [
+        255,
+        'Present Address should not be more than 255 characters',
+      ],
+      message: 'Present address cannot be empty',
+    },
+    permanentAddress: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: [
+        255,
+        'Permanent Address should not be more than 255 characters',
+      ],
+      message: 'Permanent address cannot be empty',
+    },
+    gurdian: {
+      type: guardianSchema,
+      message: 'Guardian information cannot be empty',
+    },
+    localGuardian: {
+      type: localGuardianSchema,
+      required: true,
+      message: 'Local guardian information cannot be empty',
+    },
+    profileImg: {
+      type: String,
+      trim: true,
+    },
+    isActive: {
+      type: String,
+      enum: ['active', 'blocked'],
+      default: 'active',
+      trim: true,
+      message: 'Account status cannot be empty',
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  contactNumber: {
-    type: String,
-    required: true,
-    trim: true,
-    maxlength: [15, 'Contact Number should not be more than 15 digits'],
+  {
+    toJSON: {
+      virtuals: true,
+    },
   },
-  emergencyContactNo: {
-    type: String,
-    required: true,
-    trim: true,
-    maxlength: [
-      15,
-      'Emergency Contact Number should not be more than 15 digits',
-    ],
-  },
-  bloodGroup: {
-    type: String,
-    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-    trim: true,
-    message: 'Invalid blood group',
-  },
-  presentAddress: {
-    type: String,
-    required: true,
-    trim: true,
-    maxlength: [255, 'Present Address should not be more than 255 characters'],
-    message: 'Present address cannot be empty',
-  },
-  permanentAddress: {
-    type: String,
-    required: true,
-    trim: true,
-    maxlength: [
-      255,
-      'Permanent Address should not be more than 255 characters',
-    ],
-    message: 'Permanent address cannot be empty',
-  },
-  gurdian: {
-    type: guardianSchema,
-    message: 'Guardian information cannot be empty',
-  },
-  localGuardian: {
-    type: localGuardianSchema,
-    required: true,
-    message: 'Local guardian information cannot be empty',
-  },
-  profileImg: {
-    type: String,
-    trim: true,
-  },
-  isActive: {
-    type: String,
-    enum: ['active', 'blocked'],
-    default: 'active',
-    trim: true,
-    message: 'Account status cannot be empty',
-  },
-  isDeleted: {
-    type: Boolean,
-    default: false,
-  },
+);
+
+// virtual
+studentSchema.virtual('fullName').get(function () {
+  return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
 
 studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id });
+
   return existingUser;
 };
 
@@ -266,6 +283,13 @@ studentSchema.pre('find', function (next) {
   // console.log(this);
   next();
 });
+
+studentSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  // console.log(this);
+  next();
+});
+
 // // creating a custom insrance method
 // studentSchema.methods.isUserExits = async function (id: string) {
 //   const existingUser = await Student.findOne({ id });
